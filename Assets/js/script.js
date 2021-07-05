@@ -7,6 +7,8 @@ $("#currentDay").text(currentDay);
 var currentTime = moment();
 var plannerContainer = $(".container");
 var hourArray = [];
+var target_id = "";
+var eventArray = [];
 
 // Function callbacks
 createHourArray();
@@ -21,26 +23,24 @@ function createHourArray() {
     for (i = 0; i < 9; i++) {
         var hour = moment().hour(i + 9).format("hA")
         hourArray.push(hour);
+        eventArray.push("");
+        console.log(eventArray);
         console.log(hourArray);
-    };
-    
+    };  
 };
 
 
-//$('button').each(function () {
 
 
 function renderEvents() {
     var displayEvent = JSON.parse(localStorage.getItem("events"));
     $("textarea").empty();
     $.each(hourArray, function (i, value){
-        $("#text" + i).text(displayEvent[i]);
-       
-    });
-    //console.log(displayEvent);
+        $("#text" + i).text(displayEvent[i]); 
+    });    
 };
-// Start by creating for loop which creates day planner table.
 
+// Start by creating for loop which creates day planner table.
 function createTimeBlocks() {
     for (i = 0; i < hourArray.length; i++) {
         var timeBlockRow = $('<div>');
@@ -71,17 +71,16 @@ function createTimeBlocks() {
         };
     };
     
-    
-    $('.saveBtn').on('click', function() {
-        //console.log(hourArray);
+    // Set item click function
+    $('.saveBtn').on('click', function(event) {
+        
+        target_id = event.target.getAttribute("data-row");
+        console.log(target_id);
+        
         var eventInput = $(this).siblings('.description').val();
-        //console.log($(this));
-
-        localStorage.setItem("events", JSON.stringify(eventInput));
-        //console.log(localStorage);
+        eventArray[target_id] = eventInput;
+        console.log(eventArray);
+        
+        localStorage.setItem("events", JSON.stringify(eventArray));
     });
-
 };
-
-// Saving 
-// map function. transform an array to empty text values.
